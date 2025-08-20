@@ -77,3 +77,5 @@ Medication.init(
     indexes: [{ fields: ["name"] }, { fields: ["stockQuantity"] }],
   }
 );
+
+export default Medication;

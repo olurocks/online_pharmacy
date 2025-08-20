@@ -78,3 +78,5 @@ Patient.init(
     indexes: [{ fields: ["email"], unique: true }, { fields: ["name"] }],
   }
 );
+
+export default Patient;

@@ -6,8 +6,8 @@ import {
   updatePatient,
   searchPatients,
   deletePatient,
-} from "../controllers/patientController"; //to do
-import { validate } from "../middleware/validation"; //to do
+} from "../controllers/patientController.ts";
+import { validate } from "../middleware/validation.ts";
 import {
   createPatientSchema,
   updatePatientSchema,

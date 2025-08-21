@@ -16,7 +16,7 @@ interface PrescriptionAttributes {
   status: PrescriptionStatus;
   instructions?: string;
   prescribedBy?: string;
-  totalAmount?: string;
+  totalAmount?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -44,7 +44,7 @@ class Prescription
   public status!: PrescriptionStatus;
   public instructions?: string;
   public prescribedBy?: string;
-  public totalAmount?: string;
+  public totalAmount?: number;
   public createdAt!: Date;
   public updatedAt!: Date;
 }

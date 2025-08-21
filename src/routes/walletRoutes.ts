@@ -5,8 +5,8 @@ import {
   processPayment,
   getTransactionHistory,
   getWalletSummary,
-} from "../controllers/walletController"; //to do
-import { validate } from "../middleware/validation";
+} from "../controllers/walletController.ts"; //to do
+import { validate } from "../middleware/validation.ts";
 import {
   addFundsSchema,
   processPaymentSchema,

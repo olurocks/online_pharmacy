@@ -6,14 +6,14 @@ import {
   updatePrescriptionStatus,
   deletePrescription,
   getPrescriptionsByPatient,
-} from "../controllers/prescriptionController"; // to do
-import { validate } from "../middleware/validation";
+} from "../controllers/prescriptionController.ts"; // to do
+import { validate } from "../middleware/validation.ts";
 import {
   createPrescriptionSchema,
   updatePrescriptionSchema,
   prescriptionFilterSchema,
   uuidSchema,
-} from "../utils/validation";
+} from "../utils/validation.ts";
 
 const router = Router();
 

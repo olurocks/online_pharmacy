@@ -16,7 +16,7 @@ import {
   bookAppointmentSchema,
   appointmentFilterSchema,
   uuidSchema,
-} from "../utils/validation"; //to do
+} from "../utils/validation.ts"; //to do
 import Joi from "joi";
 
 const router = Router();

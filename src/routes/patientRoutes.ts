@@ -14,7 +14,7 @@ import {
   searchPatientSchema,
   uuidSchema,
   paginationSchema,
-} from "../utils/validation"; //to do
+} from "../utils/validation.ts";
 
 const router = Router();
 

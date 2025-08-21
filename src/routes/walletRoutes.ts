@@ -12,7 +12,7 @@ import {
   processPaymentSchema,
   uuidSchema,
   paginationSchema,
-} from "../utils/validation";
+} from "../utils/validation.ts";
 import Joi from "joi";
 
 const router = Router();

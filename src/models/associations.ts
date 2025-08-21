@@ -1,9 +1,9 @@
-import Patient from "./Patient";
-import Prescription from "./Prescription";
-import Medication from "./Medication";
-import Wallet from "./Wallet";
-import Transaction from "./Transaction";
-import { AppointmentSlot, Booking } from "./Appointment";
+import Patient from "./Patient.ts";
+import Prescription from "./Prescription.ts";
+import Medication from "./Medication.ts";
+import Wallet from "./Wallet.ts";
+import Transaction from "./Transaction.ts";
+import { AppointmentSlot, Booking } from "./Appointment.ts";
 
 // Patient associations
 Patient.hasMany(Prescription, {
@@ -75,5 +75,3 @@ export {
   AppointmentSlot,
   Booking,
 };
-
-export default Medication;

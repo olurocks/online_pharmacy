@@ -1,4 +1,4 @@
-import sequelize from "../database/config";
+import sequelize from "../database/config.ts";
 import { DataTypes, Model } from "sequelize";
 import type { Optional } from "sequelize";
 

@@ -1,6 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import type { Optional } from "sequelize";
-import sequelize from "../database/config";
+import sequelize from "../database/config.ts";
 
 interface PatientAttributes {
   id: string;

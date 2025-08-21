@@ -1,6 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import { Optional } from "sequelize";
-import sequelize from "../database/config";
+import sequelize from "../database/config.ts";
 
 export enum PrescriptionStatus {
   PENDING = "pending",

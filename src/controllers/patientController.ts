@@ -21,9 +21,11 @@ export const createPatient = asyncHandler(
         { transaction }
       );
 
+      console.log("Patient created:", patient.dataValues.id);
+
       await Wallet.create(
         {
-          patientId: patient.id,
+          patientId: patient.dataValues.id,
           balance: 0.0,
         },
         { transaction }
@@ -35,12 +37,12 @@ export const createPatient = asyncHandler(
         success: true,
         message: "Patient created successfully",
         data: {
-          id: patient.id,
-          name: patient.name,
-          email: patient.email,
-          phone: patient.phone,
-          dateOfBirth: patient.dateOfBirth,
-          createdAt: patient.createdAt,
+          id: patient.dataValues.id,
+          name: patient.dataValues.name,
+          email: patient.dataValues.email,
+          phone: patient.dataValues.phone,
+          dateOfBirth: patient.dataValues.dateOfBirth,
+          createdAt: patient.dataValues.createdAt,
         },
       });
     } catch (error) {
@@ -118,12 +120,12 @@ export const updatePatient = asyncHandler(
       success: true,
       message: "Patient updated successfully",
       data: {
-        id: patient.id,
-        name: patient.name,
-        email: patient.email,
-        phone: patient.phone,
-        dateOfBirth: patient.dateOfBirth,
-        updatedAt: patient.updatedAt,
+        id: patient.dataValues.id,
+        name: patient.dataValues.name,
+        email: patient.dataValues.email,
+        phone: patient.dataValues.phone,
+        dateOfBirth: patient.dataValues.dateOfBirth,
+        updatedAt: patient.dataValues.updatedAt,
       },
     });
   }

@@ -14,16 +14,17 @@ export const validate = (
     });
 
     if (error) {
+      console.error("Validation error:", error.details);
       const details = error.details.map((detail) => ({
         field: detail.path.join("."),
         message: detail.message,
         value: detail.context?.value,
       }));
 
-      return next(new AppError("Validation Error", 400));
+      return res.status(400).json({
+        error: "Validation Error",
+        details,
+      });
     }
-
-    (req as any).validatedData = value;
-    next();
   };
 };

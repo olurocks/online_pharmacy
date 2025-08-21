@@ -25,31 +25,31 @@ const transactionHistorySchema = Joi.object({
 
 router.get(
   "/:patientId/balance",
-  validate(uuidSchema, "params"),
+  // validate(uuidSchema, "params"),
   getWalletBalance
 );
 
 router.post(
   "/:patientId/add-funds",
-  [validate(uuidSchema, "params"), validate(addFundsSchema)],
+  // [validate(uuidSchema, "params"), validate(addFundsSchema)],
   addFunds
 );
 
 router.post(
   "/:patientId/payment",
-  [validate(uuidSchema, "params"), validate(processPaymentSchema)],
+  // [validate(uuidSchema, "params"), validate(processPaymentSchema)],
   processPayment
 );
 
 router.get(
   "/:patientId/transactions",
-  [validate(uuidSchema, "params"), validate(transactionHistorySchema, "query")],
+  // [validate(uuidSchema, "params"), validate(transactionHistorySchema, "query")],
   getTransactionHistory
 );
 
 router.get(
   "/:patientId/summary",
-  validate(uuidSchema, "params"),
+  // validate(uuidSchema, "params"),
   getWalletSummary
 );
 

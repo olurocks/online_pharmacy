@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Op } from "sequelize";
 import { Medication } from "../models/associations.ts";
 import { AppError, asyncHandler } from "../middleware/errorHandler.ts";
+import sequelize from "../database/config.ts";
 
 export const createMedication = asyncHandler(
   async (req: Request, res: Response) => {
@@ -188,21 +189,35 @@ export const restockMedication = asyncHandler(
       throw new AppError("Medication not found", 404);
     }
 
-    const previousStock = medication.stockQuantity;
-    medication.stockQuantity += Number(quantity);
-    await medication.save();
+    const t = await sequelize.transaction();
 
-    res.json({
-      success: true,
-      message: "Medication restocked successfully",
-      data: {
-        id: medication.id,
-        name: medication.name,
-        previousStock,
-        newStock: medication.stockQuantity,
-        addedQuantity: Number(quantity),
-        updatedAt: medication.updatedAt,
-      },
-    });
+    try {
+      const previousStock = medication.dataValues.stockQuantity;
+      const newStock = previousStock + Number(quantity);
+
+      // Update the medication with new stock quantity
+      const updatedMedication = await medication.update(
+        { stockQuantity: newStock },
+        { transaction: t }
+      );
+
+      await t.commit();
+
+      res.json({
+        success: true,
+        message: "Medication restocked successfully",
+        data: {
+          id: updatedMedication.id,
+          name: updatedMedication.name,
+          previousStock,
+          newStock: updatedMedication.dataValues.stockQuantity,
+          addedQuantity: Number(quantity),
+          updatedAt: updatedMedication.dataValues.updatedAt,
+        },
+      });
+    } catch (error) {
+      await t.rollback();
+      throw error;
+    }
   }
 );

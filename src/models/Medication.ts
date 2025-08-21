@@ -62,7 +62,7 @@ Medication.init(
       field: "unit_price",
       validate: {
         min: 0,
-        isInt: true,
+        isDecimal: true,
       },
     },
     description: {

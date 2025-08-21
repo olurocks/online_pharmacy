@@ -132,7 +132,8 @@ export const updatePrescriptionStatus = asyncHandler(
         throw new AppError("Prescription not found", 404);
       }
 
-      const currentStatus = prescription.status as PrescriptionStatus;
+      const currentStatus = prescription.dataValues
+        .status as PrescriptionStatus;
       const validTransitions: Record<PrescriptionStatus, PrescriptionStatus[]> =
         {
           [PrescriptionStatus.PENDING]: [PrescriptionStatus.FILLED],
@@ -151,16 +152,20 @@ export const updatePrescriptionStatus = asyncHandler(
 
       if (status === PrescriptionStatus.FILLED) {
         const medication = await Medication.findOne({
-          where: { name: prescription.medicationName },
+          where: { name: prescription.dataValues.medicationName },
           transaction,
         });
 
         if (medication) {
-          if (medication.stockQuantity < prescription.quantity) {
+          if (
+            medication.dataValues.stockQuantity <
+            prescription.dataValues.quantity
+          ) {
             throw new AppError("Insufficient medication stock", 400);
           }
 
-          medication.stockQuantity -= prescription.quantity;
+          medication.dataValues.stockQuantity -=
+            prescription.dataValues.quantity;
           await medication.save({ transaction });
 
           if (!prescription.totalAmount) {
@@ -170,7 +175,7 @@ export const updatePrescriptionStatus = asyncHandler(
         }
       }
 
-      prescription.status = status;
+      prescription.dataValues.status = status;
       await prescription.save({ transaction });
 
       await transaction.commit();

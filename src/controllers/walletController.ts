@@ -32,9 +32,9 @@ export const getWalletBalance = asyncHandler(
       success: true,
       message: "Wallet balance retrieved successfully",
       data: {
-        walletId: wallet.id,
-        patientId: wallet.patientId,
-        balance: wallet.balance,
+        walletId: wallet.dataValues.id,
+        patientId: wallet.dataValues.patientId,
+        balance: wallet.dataValues.balance,
         patient: existingPatient,
       },
     });
@@ -62,18 +62,21 @@ export const addFunds = asyncHandler(async (req: Request, res: Response) => {
       throw new AppError("Wallet not found", 404);
     }
 
-    const balanceBefore = Number(wallet.balance);
-    wallet.creditBalance(Number(amount));
+    const balanceBefore = Number(wallet.dataValues.balance);
+    console.log("balanceBefore:", balanceBefore);
+    const balanceAfter = balanceBefore + Number(amount);
+    await wallet.update({ balance: balanceAfter });
+    // wallet.creditBalance(Number(amount));
     await wallet.save({ transaction });
 
     await Transaction.create(
       {
-        walletId: wallet.id,
+        walletId: wallet.dataValues.id,
         type: TransactionType.CREDIT,
         amount: Number(amount),
         description: "Funds added to wallet",
         balanceBefore,
-        balanceAfter: Number(wallet.balance),
+        balanceAfter: balanceAfter,
       },
       { transaction }
     );
@@ -84,11 +87,11 @@ export const addFunds = asyncHandler(async (req: Request, res: Response) => {
       success: true,
       message: "Funds added successfully",
       data: {
-        walletId: wallet.id,
-        patientId: wallet.patientId,
+        walletId: wallet.dataValues.id,
+        patientId: wallet.dataValues.patientId,
         amountAdded: Number(amount),
         previousBalance: balanceBefore,
-        newBalance: Number(wallet.balance),
+        newBalance: Number(wallet.dataValues.balance),
       },
     });
   } catch (error) {
@@ -123,19 +126,19 @@ export const processPayment = asyncHandler(
         throw new AppError("Insufficient funds", 400);
       }
 
-      const balanceBefore = Number(wallet.balance);
+      const balanceBefore = Number(wallet.dataValues.balance);
       wallet.debitBalance(Number(amount));
       await wallet.save({ transaction });
 
       await Transaction.create(
         {
-          walletId: wallet.id,
+          walletId: wallet.dataValues.id,
           type: TransactionType.DEBIT,
           amount: Number(amount),
           description,
           referenceId,
           balanceBefore,
-          balanceAfter: Number(wallet.balance),
+          balanceAfter: Number(wallet.dataValues.balance),
         },
         { transaction }
       );
@@ -146,13 +149,13 @@ export const processPayment = asyncHandler(
         success: true,
         message: "Payment processed successfully",
         data: {
-          walletId: wallet.id,
-          patientId: wallet.patientId,
+          walletId: wallet.dataValues.id,
+          patientId: wallet.dataValues.patientId,
           amountPaid: Number(amount),
           description,
           referenceId,
           previousBalance: balanceBefore,
-          newBalance: Number(wallet.balance),
+          newBalance: Number(wallet.dataValues.balance),
         },
       });
     } catch (error) {
@@ -182,7 +185,7 @@ export const getTransactionHistory = asyncHandler(
       throw new AppError("Wallet not found", 404);
     }
 
-    const whereClause: any = { walletId: wallet.id };
+    const whereClause: any = { walletId: wallet.dataValues.id };
 
     if (type) {
       whereClause.type = type;
@@ -199,8 +202,8 @@ export const getTransactionHistory = asyncHandler(
       success: true,
       message: "Transaction history retrieved successfully",
       data: {
-        walletId: wallet.id,
-        currentBalance: wallet.balance,
+        walletId: wallet.dataValues.id,
+        currentBalance: wallet.dataValues.balance,
         transactions,
       },
       pagination: {
@@ -239,7 +242,7 @@ export const getWalletSummary = asyncHandler(
     }
 
     const allTransactions = await Transaction.findAll({
-      where: { walletId: wallet.id },
+      where: { walletId: wallet.dataValues.id },
       attributes: ["type", "amount"],
     });
 
@@ -252,7 +255,7 @@ export const getWalletSummary = asyncHandler(
       .reduce((sum: number, t: any) => sum + Number(t.amount), 0);
 
     const latestTransactions = await Transaction.findAll({
-      where: { walletId: wallet.id },
+      where: { walletId: wallet.dataValues.id },
       order: [["createdAt", "DESC"]],
       limit: 10,
     });
@@ -261,9 +264,9 @@ export const getWalletSummary = asyncHandler(
       success: true,
       message: "Wallet summary retrieved successfully",
       data: {
-        walletId: wallet.id,
-        patientId: wallet.patientId,
-        currentBalance: wallet.balance,
+        walletId: wallet.dataValues.id,
+        patientId: wallet.dataValues.patientId,
+        currentBalance: wallet.dataValues.balance,
         totalCredits,
         totalDebits,
         totalTransactions: allTransactions.length,

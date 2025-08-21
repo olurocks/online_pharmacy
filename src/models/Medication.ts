@@ -49,15 +49,17 @@ Medication.init(
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0,
+      field: "stock_quantity",
       validate: {
         isInt: true,
         min: 0,
       },
     },
     unitPrice: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
       defaultValue: 0,
+      field: "unit_price",
       validate: {
         min: 0,
         isInt: true,
@@ -73,8 +75,9 @@ Medication.init(
     sequelize,
     modelName: "Medication",
     tableName: "medications",
+    underscored: true,
     timestamps: true,
-    indexes: [{ fields: ["name"] }, { fields: ["stockQuantity"] }],
+    indexes: [{ fields: ["name"] }, { fields: ["stock_quantity"] }],
   }
 );
 

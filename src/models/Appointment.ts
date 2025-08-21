@@ -66,14 +66,17 @@ AppointmentSlot.init(
     startTime: {
       type: DataTypes.TIME,
       allowNull: false,
+      field: "start_time",
     },
     endTime: {
       type: DataTypes.TIME,
       allowNull: false,
+      field: "end_time",
     },
     serviceType: {
       type: DataTypes.ENUM(...Object.values(ServiceType)),
       allowNull: false,
+      field: "service_type",
     },
     status: {
       type: DataTypes.ENUM(...Object.values(AppointmentStatus)),
@@ -85,6 +88,7 @@ AppointmentSlot.init(
     sequelize,
     modelName: "AppointmentSlot",
     tableName: "appointment_slots",
+    underscored: true,
     timestamps: true,
     indexes: [
       {
@@ -94,10 +98,10 @@ AppointmentSlot.init(
         fields: ["status"],
       },
       {
-        fields: ["serviceType"],
+        fields: ["service_type"],
       },
       {
-        fields: ["date", "startTime", "endTime"],
+        fields: ["date", "start_time", "end_time"],
         unique: true,
       },
     ],
@@ -171,13 +175,14 @@ Booking.init(
     sequelize,
     modelName: "Booking",
     tableName: "bookings",
+    underscored: true,
     timestamps: true,
     indexes: [
       {
-        fields: ["patientId"],
+        fields: ["patient_id"],
       },
       {
-        fields: ["slotId"],
+        fields: ["slot_id"],
       },
       {
         fields: ["status"],

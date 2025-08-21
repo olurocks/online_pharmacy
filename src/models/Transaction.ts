@@ -51,6 +51,7 @@ Transaction.init(
     walletId: {
       type: DataTypes.UUID,
       allowNull: false,
+      field: "wallet_id",
       references: {
         model: "wallets",
         key: "id",
@@ -79,6 +80,7 @@ Transaction.init(
     referenceId: {
       type: DataTypes.UUID,
       allowNull: true,
+      field: "reference_id",
     },
     balanceBefore: {
       type: DataTypes.DECIMAL(15, 2),
@@ -101,16 +103,17 @@ Transaction.init(
     sequelize,
     modelName: "Transaction",
     tableName: "transactions",
+    underscored: true,
     timestamps: true,
     indexes: [
       {
-        fields: ["walletId"],
+        fields: ["wallet_id"],
       },
       {
         fields: ["type"],
       },
       {
-        fields: ["referenceId"],
+        fields: ["reference_id"],
       },
     ],
   }

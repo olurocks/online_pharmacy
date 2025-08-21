@@ -60,6 +60,7 @@ Prescription.init(
     patientId: {
       type: DataTypes.UUID,
       allowNull: false,
+      field: "patient_id",
       references: {
         model: "patients",
         key: "id",
@@ -68,6 +69,7 @@ Prescription.init(
     medicationName: {
       type: DataTypes.STRING(200),
       allowNull: false,
+      field: "medication_name",
       validate: {
         notEmpty: true,
         len: [2, 200],
@@ -90,7 +92,7 @@ Prescription.init(
       },
     },
     status: {
-      type: DataTypes.ENUM(...Object.values(PrescriptionStatus)),
+      type: DataTypes.ENUM("pending", "filled", "picked-up"),
       allowNull: false,
       defaultValue: PrescriptionStatus.PENDING,
     },
@@ -101,10 +103,12 @@ Prescription.init(
     prescribedBy: {
       type: DataTypes.STRING(100),
       allowNull: true,
+      field: "prescribed_by",
     },
     totalAmount: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: true,
+      field: "total_amount",
       validate: {
         min: 0,
         isDecimal: true,
@@ -115,15 +119,17 @@ Prescription.init(
     sequelize,
     modelName: "Prescription",
     tableName: "prescriptions",
+    timestamps: true,
+    underscored: true,
     indexes: [
       {
-        fields: ["patientId"],
+        fields: ["patient_id"],
       },
       {
         fields: ["status"],
       },
       {
-        fields: ["medicationName"],
+        fields: ["medication_name"],
       },
     ],
   }

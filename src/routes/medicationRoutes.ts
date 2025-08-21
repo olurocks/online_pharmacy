@@ -8,8 +8,8 @@ import {
   getLowStockMedications,
   deleteMedication,
   restockMedication,
-} from "../controllers/medicationController"; //to do
-import { validate } from "../middleware/validation";
+} from "../controllers/medicationController.ts";
+import { validate } from "../middleware/validation.ts";
 import {
   createMedicationSchema,
   updateMedicationSchema,

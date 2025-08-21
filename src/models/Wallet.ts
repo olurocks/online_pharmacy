@@ -52,6 +52,7 @@ Wallet.init(
       type: DataTypes.UUID,
       allowNull: false,
       unique: true,
+      field: "patient_id",
       references: {
         model: "patients",
         key: "id",
@@ -71,10 +72,11 @@ Wallet.init(
     sequelize,
     modelName: "Wallet",
     tableName: "wallets",
+    underscored: true,
     timestamps: true,
     indexes: [
       {
-        fields: ["patientId"],
+        fields: ["patient_id"],
         unique: true,
       },
     ],

@@ -74,6 +74,7 @@ Patient.init(
     sequelize,
     modelName: "Patient",
     tableName: "patients",
+    underscored: true,
     timestamps: true,
     indexes: [{ fields: ["email"], unique: true }, { fields: ["name"] }],
   }

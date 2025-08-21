@@ -1,5 +1,10 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+CREATE TYPE enum_prescriptions_status AS ENUM ('pending', 'filled', 'picked-up');
+
+CREATE TYPE enum_appointment_slots_status AS ENUM ('available', 'booked', 'cancelled', 'completed');
+
+CREATE TYPE enum_bookings_status AS ENUM ('booked', 'cancelled', 'completed');
 CREATE TABLE IF NOT EXISTS patients (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4 (),
     name VARCHAR(100) NOT NULL,
@@ -34,13 +39,7 @@ CREATE TABLE IF NOT EXISTS prescriptions (
     medication_name VARCHAR(200) NOT NULL,
     dosage VARCHAR(100) NOT NULL,
     quantity INTEGER NOT NULL CHECK (quantity > 0),
-    status VARCHAR(20) NOT NULL DEFAULT 'pending' CHECK (
-        status IN (
-            'pending',
-            'filled',
-            'picked-up'
-        )
-    ),
+status enum_prescriptions_status NOT NULL DEFAULT 'pending',
     instructions TEXT,
     prescribed_by VARCHAR(100),
     total_amount DECIMAL(10, 2) CHECK (total_amount >= 0),
@@ -91,14 +90,7 @@ CREATE TABLE IF NOT EXISTS appointment_slots (
     service_type VARCHAR(20) NOT NULL CHECK (
         service_type IN ('consultation', 'pickup')
     ),
-    status VARCHAR(20) NOT NULL DEFAULT 'available' CHECK (
-        status IN (
-            'available',
-            'booked',
-            'cancelled',
-            'completed'
-        )
-    ),
+status enum_appointment_slots_status NOT NULL DEFAULT 'available',
     created_at TIMESTAMP
     WITH
         TIME ZONE DEFAULT NOW(),
@@ -114,13 +106,7 @@ CREATE TABLE IF NOT EXISTS bookings (
     patient_id UUID NOT NULL REFERENCES patients (id) ON DELETE CASCADE,
     slot_id UUID NOT NULL REFERENCES appointment_slots (id) ON DELETE CASCADE,
     notes TEXT,
-    status VARCHAR(20) NOT NULL DEFAULT 'booked' CHECK (
-        status IN (
-            'booked',
-            'cancelled',
-            'completed'
-        )
-    ),
+status enum_bookings_status NOT NULL DEFAULT 'booked',
     created_at TIMESTAMP
     WITH
         TIME ZONE DEFAULT NOW(),
@@ -245,68 +231,68 @@ INSERT INTO
 SELECT id, 100.00
 FROM patients;
 
--- -- Insert sample appointment slots
--- INSERT INTO
---     appointment_slots (
---         date,
---         start_time,
---         end_time,
---         service_type,
---         status
---     )
--- VALUES (
---         '2024-12-25',
---         '09:00:00',
---         '09:30:00',
---         'consultation',
---         'available'
---     ),
---     (
---         '2024-12-25',
---         '09:30:00',
---         '10:00:00',
---         'consultation',
---         'available'
---     ),
---     (
---         '2024-12-25',
---         '10:00:00',
---         '10:30:00',
---         'pickup',
---         'available'
---     ),
---     (
---         '2024-12-25',
---         '10:30:00',
---         '11:00:00',
---         'pickup',
---         'available'
---     ),
---     (
---         '2024-12-25',
---         '11:00:00',
---         '11:30:00',
---         'consultation',
---         'available'
---     ),
---     (
---         '2024-12-26',
---         '09:00:00',
---         '09:30:00',
---         'consultation',
---         'available'
---     ),
---     (
---         '2024-12-26',
---         '09:30:00',
---         '10:00:00',
---         'pickup',
---         'available'
---     ),
---     (
---         '2024-12-26',
---         '10:00:00',
---         '10:30:00',
---         'consultation',
---         'available'
---     );
+-- Insert sample appointment slots
+INSERT INTO
+    appointment_slots (
+        date,
+        start_time,
+        end_time,
+        service_type,
+        status
+    )
+VALUES (
+        '2024-12-25',
+        '09:00:00',
+        '09:30:00',
+        'consultation',
+        'available'
+    ),
+    (
+        '2024-12-25',
+        '09:30:00',
+        '10:00:00',
+        'consultation',
+        'available'
+    ),
+    (
+        '2024-12-25',
+        '10:00:00',
+        '10:30:00',
+        'pickup',
+        'available'
+    ),
+    (
+        '2024-12-25',
+        '10:30:00',
+        '11:00:00',
+        'pickup',
+        'available'
+    ),
+    (
+        '2024-12-25',
+        '11:00:00',
+        '11:30:00',
+        'consultation',
+        'available'
+    ),
+    (
+        '2024-12-26',
+        '09:00:00',
+        '09:30:00',
+        'consultation',
+        'available'
+    ),
+    (
+        '2024-12-26',
+        '09:30:00',
+        '10:00:00',
+        'pickup',
+        'available'
+    ),
+    (
+        '2024-12-26',
+        '10:00:00',
+        '10:30:00',
+        'consultation',
+        'available'
+    );

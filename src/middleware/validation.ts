@@ -23,7 +23,7 @@ export const validate = (
       return next(new AppError("Validation Error", 400));
     }
 
-    req[source] = value;
+    (req as any).validatedData = value;
     next();
   };
 };

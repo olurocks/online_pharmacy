@@ -9,14 +9,14 @@ import {
   getBookingById,
   cancelBooking,
   getPatientBookings,
-} from "../controllers/appointmentController"; // to do
-import { validate } from "../middleware/validation";
+} from "../controllers/appointmentController.ts";
+import { validate } from "../middleware/validation.ts";
 import {
   createAppointmentSlotSchema,
   bookAppointmentSchema,
   appointmentFilterSchema,
   uuidSchema,
-} from "../utils/validation.ts"; //to do
+} from "../utils/validation.ts";
 import Joi from "joi";
 
 const router = Router();
